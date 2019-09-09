@@ -59,8 +59,7 @@ public class String_matching {
             ArrayList<String> compare_chile = new ArrayList<>();
 
             for (String i : compare_child) {
-                if (i.length() >= 16) {
-                    count++;
+                if (i.length() >= 15) {
                    continue;
                 }
                 if (i.length() > 2) {
@@ -70,13 +69,31 @@ public class String_matching {
                         if (i.charAt(index - 1) == i.charAt(index))
                             num++;
                     }
-                    if (num > 2)
+                    if (num > 1)
                     {
-                        count++;
                        continue;
                     }
 
                     }
+                if (i.length() > 2) {
+                    int num = 0;
+                    for (int index = 2 ; index < i.length(); index++)
+                    {
+                        if (i.charAt(index - 2) == i.charAt(index))
+                            num++;
+                    }
+                    if (num > 2)
+                    {
+                        continue;
+                    }
+
+
+
+
+                }
+                if (i.charAt(i.length()-1) == ('i'|'v'|'u'|'j'))
+                    continue;
+
                 compare_chile.add(i);
 
                 }
@@ -88,25 +105,41 @@ public class String_matching {
             for (String i: compare_chile)
             {   int components_count = 0;
                 for (String ii: compare_parte) {
-                    if (components_count >= 2)
-                    {
-                        blends_candidates.add(i);
-                        break;
-                    }
+
                     if (ii.length() > 1) {
-                        if (i.charAt(0) == ii.charAt(0) || i.charAt(i.length() - 1) == ii.charAt(ii.length() - 1)) {
+                        if (i.charAt(0) == ii.charAt(0)) {
 
                             double similarity = compute(i, ii);
-                            if (similarity > 0.865 ) {
+                            if (similarity > 0.75) {
                                 components_count += 1;
-                                continue;
+                                break;
                             }
 
 
                         }
 
+
                     }
                 }
+                for (String ii : compare_parte){
+                    if(ii.length() > 1){
+                        if (i.charAt(i.length()-1) == ii.charAt(ii.length()-1)) {
+
+                            double similarity = compute(reversedString(i), reversedString(ii));
+                            if (similarity > 0.85){
+                                components_count +=1;
+                                break;
+                            }
+
+
+                        }
+                    }
+
+                }
+
+                if (components_count == 2)
+                    blends_candidates.add(i);
+
             }
 
 
@@ -260,6 +293,23 @@ public class String_matching {
         // we already have a good match, hence we boost the score proportional to the common prefix
         double boostedScore = score + prefixMatch * 0.1 * (1.0 - score);
         return boostedScore;
+    }
+
+    private static String reversedString(String a)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = a.length()-1;i>=0;i--)
+        {
+
+            sb.append(a.charAt(i));
+
+        }
+
+        return sb.toString();
+
+
+
     }
 
 
