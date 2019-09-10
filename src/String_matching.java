@@ -91,8 +91,7 @@ public class String_matching {
 
 
                 }
-                if (i.charAt(i.length()-1) == ('i'|'v'|'u'|'j'))
-                    continue;
+
 
                 compare_chile.add(i);
 
@@ -126,7 +125,7 @@ public class String_matching {
                         if (i.charAt(i.length()-1) == ii.charAt(ii.length()-1)) {
 
                             double similarity = compute(reversedString(i), reversedString(ii));
-                            if (similarity > 0.85){
+                            if (similarity > 0.90){
                                 components_count +=1;
                                 break;
                             }
