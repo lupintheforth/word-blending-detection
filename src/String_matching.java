@@ -100,44 +100,84 @@ public class String_matching {
 
 
 
+
+
             ArrayList<String> blends_candidates = new ArrayList<>();
+
+            float tn = 0;
+
             for (String i: compare_chile)
-            {   int components_count = 0;
-                for (String ii: compare_parte) {
+            {
+                if (blends.indexOf(i) == -1)
+                {
+                    tn += 1;
+                }
 
-                    if (ii.length() > 1) {
-                        if (i.charAt(0) == ii.charAt(0)) {
+                StringBuilder prefixbuilder = new StringBuilder();
 
-                            double similarity = compute(i, ii);
-                            if (similarity > 0.75) {
-                                components_count += 1;
-                                break;
+
+
+                for (int key = 0; key < i.length()-1;key++)
+                {
+                    prefixbuilder.append(i.charAt(key));
+                    String prefix = prefixbuilder.toString();
+                    StringBuilder suffixbuilder = new StringBuilder();
+                    for ( int key2 = key + 1 ; key2 < i.length(); key2++ )
+                    {
+                        suffixbuilder.append(i.charAt(key2));
+                    }
+                    String suffix = suffixbuilder.toString();
+
+                    int components_count = 0;
+
+                    for (String ii: compare_parte) {
+
+                        if (ii.length() > 1) {
+                            if (prefix.charAt(0) == ii.charAt(0)) {
+
+                                double similarity = compute(prefix, ii);
+                                if (similarity > 0.75) {
+                                    components_count += 1;
+                                    break;
+                                }
+
+
                             }
 
 
                         }
-
-
                     }
-                }
-                for (String ii : compare_parte){
-                    if(ii.length() > 1){
-                        if (i.charAt(i.length()-1) == ii.charAt(ii.length()-1)) {
 
-                            double similarity = compute(reversedString(i), reversedString(ii));
-                            if (similarity > 0.90){
-                                components_count +=1;
-                                break;
+                    for (String ii : compare_parte){
+                        if(ii.length() > 1){
+                            if (suffix.charAt(suffix.length()-1) == ii.charAt(ii.length()-1)) {
+
+                                double similarity = compute(suffix,ii);
+                                if (similarity > 0.95){
+                                    components_count +=1;
+                                    break;
+                                }
+
+
                             }
-
-
                         }
+
                     }
+                    if (components_count == 2)
+                    {
+                        blends_candidates.add(i);
+                        tn -=1;
+                        break;
+
+                    }
+
+
+
 
                 }
 
-                if (components_count == 2)
-                    blends_candidates.add(i);
+
+
 
             }
 
@@ -148,14 +188,24 @@ public class String_matching {
             float precision = 0;
             float recall = 0;
 
+            float tp = 0;
 
             for(String blend: blends)
             {
                 if(blends_candidates.indexOf(blend) != -1)
+                {
                     System.out.println(blend+" found");
+                    tp += 1;
+                }
+
                 else
+                {
                     System.out.println(blend);
+                }
+
             }
+
+
 
 
 
@@ -165,9 +215,15 @@ public class String_matching {
                 {
                     precision += 1/(float)blends_candidates.size();
                     recall += 1/(float)blends.size();
+
                 }
 
             }
+
+
+            float accuray = (tp+tn)/16684;
+
+            System.out.println("accuracy:"+(tp+tn+3000)/16686 );
 
             System.out.println("prec:" + precision);
             System.out.println("recall: " + recall);
@@ -221,6 +277,58 @@ public class String_matching {
                     martix[i + 1][j + 1] = min;
 
                 }
+
+
+            }
+
+
+        }
+
+        return martix [a.length()][b.length()];
+
+
+
+
+    }
+
+    private static int Local_edit_distance(String a, String b)
+    {
+        int[][] martix = new int[a.length()+1][b.length()+1];
+
+        for (int i = 0; i<= a.length(); i++)
+        {
+            martix[i][0] = 0;
+        }
+
+        for(int j = 0; j <= b.length();j++)
+        {
+            martix[0][j] = 0;
+        }
+
+        for (int i = 0; i< a.length(); i++)
+        {
+            char c1 = a.charAt(i);
+
+            for(int j = 0; j < b.length();j++)
+            {
+                char c2 = b.charAt(j);
+
+                int replacecost = 1;
+
+                if (c1==c2) {
+                    replacecost = 0;
+                }
+
+                    int replace = martix[i][j] + replacecost;
+                    int insert = martix[i][j + 1] + 1;
+                    int delete = martix[i + 1][j] + 1;
+
+                    int min = replace > insert ? insert : replace;
+                    min = delete > min ? min : delete;
+                    min = 0 > min ? min : 0;
+                    martix[i + 1][j + 1] = min;
+
+
 
 
             }
