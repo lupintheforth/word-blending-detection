@@ -63,6 +63,27 @@ recall: 0.7880788
 
 
 
+split up and use GED
+
+prec:0.011
+recall:0.64
+
+split up and use Jaro winkler
+
+accuraycy : 26%
+prec :0.011752587
+recall: 0.90728366
+
+confirm there is no connection between the prefix and sufix determined
+
+accuracy: 0.6283865
+prec:0.016092313
+recall: 0.6556289
+
+
+
+
+
 
 
 

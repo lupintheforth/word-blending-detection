@@ -62,6 +62,10 @@ public class String_matching {
                 if (i.length() >= 15) {
                    continue;
                 }
+                if (i.length() <= 2)
+                {
+                    continue;
+                }
                 if (i.length() > 2) {
                     int num = 0;
                     for (int index = 1; index < i.length(); index++)
@@ -98,20 +102,36 @@ public class String_matching {
                 }
             System.out.println(compare_chile.size());
 
+            float tn = 0;
+
 
 
             ArrayList<String> blends_candidates = new ArrayList<>();
             for (String i: compare_chile)
-            {   int components_count = 0;
+            {   String prefix = "";
+                String suffix = "";
+
+
+
+                if (blends.indexOf(i) == -1)
+
+                {
+
+                    tn += 1;
+
+                }
+
+
                 for (String ii: compare_parte) {
 
                     if (ii.length() > 1) {
                         if (i.charAt(0) == ii.charAt(0)) {
 
                             double similarity = compute(i, ii);
-                            if (similarity > 0.75) {
-                                components_count += 1;
+                            if (similarity > 0.85) {
+                                prefix = ii;
                                 break;
+
                             }
 
 
@@ -125,8 +145,8 @@ public class String_matching {
                         if (i.charAt(i.length()-1) == ii.charAt(ii.length()-1)) {
 
                             double similarity = compute(reversedString(i), reversedString(ii));
-                            if (similarity > 0.90){
-                                components_count +=1;
+                            if (similarity > 0.905){
+                                suffix = ii;
                                 break;
                             }
 
@@ -135,9 +155,13 @@ public class String_matching {
                     }
 
                 }
+                // establish a algorithm to make the first matched source word does not resembly the second one
 
-                if (components_count == 2)
+                if (!prefix.equals("")&&!suffix.equals("")&&compute(prefix,suffix) < 0.85)
+                {
                     blends_candidates.add(i);
+                    tn -= 1;
+                }
 
             }
 
@@ -157,7 +181,7 @@ public class String_matching {
                     System.out.println(blend);
             }
 
-
+            int tp = 0;
 
             for(String candidate: blends_candidates)
             {
@@ -165,9 +189,12 @@ public class String_matching {
                 {
                     precision += 1/(float)blends_candidates.size();
                     recall += 1/(float)blends.size();
+                    tp += 1;
                 }
 
             }
+
+            System.out.println("accuracy: "+ (tp+tn+16684-compare_chile.size())/16684);
 
             System.out.println("prec:" + precision);
             System.out.println("recall: " + recall);
