@@ -10,11 +10,11 @@ public class String_matching {
 
     public static void main(String[] args){
         try {
-            File dictionary = new File("C:\\Users\\yizzhu\\Documents\\GitHub\\word-blending-detection\\2019S2-COMP90049_proj1-data_windows\\2019S2-COMP90049_proj1-data_windows\\dict.txt");
+            File dictionary = new File("C:\\Users\\yizzhu.STUDENT\\Documents\\GitHub\\word-blending-detection\\2019S2-COMP90049_proj1-data_windows\\2019S2-COMP90049_proj1-data_windows\\dict.txt");
 
-            File candidates = new File("C:\\Users\\yizzhu\\Documents\\GitHub\\word-blending-detection\\2019S2-COMP90049_proj1-data_windows\\2019S2-COMP90049_proj1-data_windows\\candidates.txt");
+            File candidates = new File("C:\\Users\\yizzhu.STUDENT\\Documents\\GitHub\\word-blending-detection\\2019S2-COMP90049_proj1-data_windows\\2019S2-COMP90049_proj1-data_windows\\candidates.txt");
 
-            File true_bleands = new File("C:\\Users\\yizzhu\\Documents\\GitHub\\word-blending-detection\\2019S2-COMP90049_proj1-data_windows\\2019S2-COMP90049_proj1-data_windows\\blends.txt");
+            File true_bleands = new File("C:\\Users\\yizzhu.STUDENT\\Documents\\GitHub\\word-blending-detection\\2019S2-COMP90049_proj1-data_windows\\2019S2-COMP90049_proj1-data_windows\\blends.txt");
 
             Scanner dictionaryoutput = new Scanner(new FileReader(dictionary));
 
@@ -128,7 +128,7 @@ public class String_matching {
                         if (i.charAt(0) == ii.charAt(0)) {
 
                             double similarity = compute(i, ii);
-                            if (similarity > 0.85) {
+                            if (similarity > 0.95) {
                                 prefix = ii;
                                 break;
 
@@ -144,8 +144,8 @@ public class String_matching {
                     if(ii.length() > 1){
                         if (i.charAt(i.length()-1) == ii.charAt(ii.length()-1)) {
 
-                            double similarity = compute(reversedString(i), reversedString(ii));
-                            if (similarity > 0.905){
+                            double similarity = Global_edit_distance(i, ii);
+                            if (similarity > 0.95){
                                 suffix = ii;
                                 break;
                             }
@@ -157,7 +157,7 @@ public class String_matching {
                 }
                 // establish a algorithm to make the first matched source word does not resembly the second one
 
-                if (!prefix.equals("")&&!suffix.equals("")&&compute(prefix,suffix) < 0.85)
+                if (!prefix.equals("")&&!suffix.equals(""))
                 {
                     blends_candidates.add(i);
                     tn -= 1;
